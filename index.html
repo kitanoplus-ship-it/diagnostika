@@ -240,7 +240,7 @@ const SIZES=[
   {id:"s3",label:"15+ человек"},
 ];
 
-const S={step:1,biz:null,pains:[],size:null,loading:false,result:null,err:null,apiKey:'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'};
+const S={step:1,biz:null,pains:[],size:null,loading:false,result:null,err:null};
 
 function $(id){return document.getElementById(id);}
 function render(){$('app').innerHTML=buildHTML();}
@@ -391,12 +391,9 @@ async function runDiag(){
 Инструменты — конкретные: Telegram-бот, n8n, Make, Claude, Notion, AmoCRM, Google Sheets и т.п.`;
 
   try{
-    const res=await fetch('https://api.openai.com/v1/chat/completions',{
+    const res=await fetch('https://openai-proxy.kitanoplus.workers.dev/',{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'Authorization':'Bearer '+S.apiKey
-      },
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model:'gpt-4o',
         max_tokens:1000,
