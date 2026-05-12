@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ИИ-диагностика бизнеса · @studioquince</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F5F3EE;
+  --surface:#FFFFFF;
+  --surface2:#F0EDE8;
+  --border:#E2DED7;
+  --text:#1A1814;
+  --text2:#6B6560;
+  --text3:#A09B95;
+  --accent:#1D7A6E;
+  --accent-bg:#EBF6F4;
+  --accent-border:#B6DDD9;
+  --amber:#B45309;
+  --amber-bg:#FEF3C7;
+  --amber-border:#FCD34D;
+  --red:#B91C1C;
+  --green:#15803D;
+  --radius:12px;
+  --radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,.08),0 2px 4px rgba(0,0,0,.04);
+}
+body{
+  font-family:'Onest',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  padding:24px 16px 80px;
+}
+.wrap{width:100%;max-width:540px;}
+
+/* Header */
+.badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--accent-bg);color:var(--accent);
+  border:1px solid var(--accent-border);
+  font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  padding:5px 12px;border-radius:999px;margin-bottom:18px;
+}
+h1{font-size:27px;font-weight:700;line-height:1.2;margin-bottom:10px;color:var(--text);}
+h1 span{color:var(--accent);}
+.sub{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:28px;}
+
+/* Progress */
+.prog{display:flex;gap:5px;margin-bottom:28px;}
+.prog-bar{height:3px;flex:1;border-radius:99px;background:var(--border);transition:background .3s;}
+.prog-bar.done{background:var(--accent);}
+
+/* Section titles */
+.stitle{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:12px;letter-spacing:.02em;}
+.shint{font-size:12px;color:var(--text3);margin:-8px 0 14px;}
+
+/* Business type grid */
+.biz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px;margin-bottom:24px;}
+.biz-card{
+  padding:14px 8px 12px;border-radius:var(--radius);
+  border:1.5px solid var(--border);background:var(--surface);
+  color:var(--text2);font-size:12px;font-weight:500;
+  cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-family:inherit;text-align:center;line-height:1.35;
+  transition:all .15s;box-shadow:var(--shadow);
+}
+.biz-card i{font-size:22px;color:var(--text3);}
+.biz-card:hover{border-color:var(--accent-border);background:var(--accent-bg);color:var(--accent);}
+.biz-card:hover i{color:var(--accent);}
+.biz-card.sel{border-color:var(--accent);background:var(--accent-bg);color:var(--accent);box-shadow:0 0 0 3px rgba(29,122,110,.1);}
+.biz-card.sel i{color:var(--accent);}
+
+/* Chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+.chip{
+  padding:8px 15px;border-radius:999px;
+  border:1.5px solid var(--border);background:var(--surface);
+  color:var(--text2);font-size:13px;cursor:pointer;
+  font-family:inherit;transition:all .15s;box-shadow:var(--shadow);
+}
+.chip:hover{border-color:var(--accent-border);color:var(--accent);}
+.chip.sel{border-color:var(--accent);background:var(--accent-bg);color:var(--accent);font-weight:500;}
+
+/* Divider */
+hr{border:none;border-top:1px solid var(--border);margin:20px 0;}
+
+/* Buttons */
+.btn{
+  width:100%;padding:14px 24px;border-radius:var(--radius);
+  border:none;font-size:15px;font-weight:600;cursor:pointer;
+  font-family:inherit;transition:all .15s;
+  display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;
+}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:#166960;}
+.btn-primary:disabled{opacity:.35;cursor:default;}
+.btn-ghost{
+  background:transparent;border:1.5px solid var(--border);
+  color:var(--text2);font-size:13px;padding:9px 18px;width:auto;
+  border-radius:var(--radius-sm);margin-top:10px;
+}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+.btn-center{display:flex;justify-content:center;}
+
+/* API key block */
+.apikey-block{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--radius);padding:16px;margin-bottom:20px;
+  box-shadow:var(--shadow);
+}
+.apikey-block label{font-size:12px;font-weight:600;color:var(--text2);display:block;margin-bottom:8px;letter-spacing:.03em;}
+.apikey-block input{
+  width:100%;padding:10px 12px;border-radius:var(--radius-sm);
+  border:1.5px solid var(--border);background:var(--bg);
+  font-size:13px;font-family:monospace;color:var(--text);
+  outline:none;transition:border .15s;
+}
+.apikey-block input:focus{border-color:var(--accent);}
+.apikey-block .hint{font-size:11px;color:var(--text3);margin-top:6px;}
+
+/* Scanning animation */
+.scan{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:14px 16px;margin-top:14px;
+  font-family:monospace;font-size:12px;color:var(--text3);line-height:2;
+  box-shadow:var(--shadow);
+}
+.scan-line{color:var(--accent);font-weight:500;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.cursor{animation:blink 1s step-end infinite;}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.spin{animation:spin .9s linear infinite;}
+
+/* Result: hours saved */
+.result-hero{
+  background:var(--accent-bg);border:1.5px solid var(--accent-border);
+  border-radius:var(--radius);padding:20px;margin-bottom:20px;
+  display:flex;align-items:center;gap:18px;
+}
+.hours-num{font-size:48px;font-weight:700;color:var(--accent);line-height:1;letter-spacing:-2px;}
+.hours-label{font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.hours-verdict{font-size:13px;color:var(--text2);line-height:1.5;}
+
+/* Task cards */
+.task-card{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--radius);padding:16px;margin-bottom:10px;
+  box-shadow:var(--shadow);
+}
+.task-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px;}
+.task-title{font-size:14px;font-weight:600;color:var(--text);flex:1;}
+.badge-high{
+  font-size:11px;padding:3px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;
+  background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border);font-weight:500;
+}
+.badge-mid{
+  font-size:11px;padding:3px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;
+  background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border);font-weight:500;
+}
+.task-desc{font-size:13px;color:var(--text2);line-height:1.55;margin-bottom:10px;}
+.task-tool{font-size:12px;color:var(--accent);font-family:monospace;display:flex;align-items:center;gap:5px;}
+
+/* First step */
+.first-step{
+  background:var(--amber-bg);border:1.5px solid var(--amber-border);
+  border-radius:var(--radius);padding:16px;margin-top:16px;
+}
+.first-step-label{font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+.first-step-text{font-size:13px;color:#78350F;line-height:1.6;}
+
+/* CTA */
+.cta{
+  background:var(--surface);border:2px solid var(--accent);
+  border-radius:var(--radius);padding:28px 24px;margin-top:24px;
+  text-align:center;box-shadow:var(--shadow-md);
+}
+.cta-icon{font-size:32px;color:var(--accent);margin-bottom:10px;}
+.cta-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.cta-sub{font-size:14px;color:var(--text2);margin-bottom:20px;line-height:1.55;}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:9px;
+  background:var(--accent);color:#fff;padding:14px 28px;
+  border-radius:var(--radius);font-weight:700;font-size:15px;
+  text-decoration:none;transition:background .15s;
+}
+.cta-btn:hover{background:#166960;}
+.cta-footer{font-size:11px;color:var(--text3);margin-top:14px;}
+
+.error{color:var(--red);font-size:13px;margin-bottom:8px;padding:10px 14px;background:#FEF2F2;border:1px solid #FECACA;border-radius:var(--radius-sm);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER (always visible) -->
+  <div class="badge"><i class="ti ti-cpu" aria-hidden="true"></i>ИИ-диагностика бизнеса</div>
+  <h1>Узнай, сколько времени<br>ты теряешь <span>каждый месяц</span></h1>
+  <p class="sub">3 вопроса — и ты получишь конкретный план автоматизации под свой бизнес. Бесплатно, без регистрации.</p>
+
+  <!-- MAIN CONTENT -->
+  <div id="app"></div>
+
+</div>
+
+<script>
+const BIZ=[
+  {id:"beauty",label:"Красота и уход",icon:"ti-sparkles"},
+  {id:"food",label:"Кафе / доставка",icon:"ti-tool-kitchen-2"},
+  {id:"auto",label:"Авто / ремонт",icon:"ti-car"},
+  {id:"retail",label:"Магазин / торговля",icon:"ti-shopping-bag"},
+  {id:"services",label:"Услуги (юрист, бух.)",icon:"ti-briefcase"},
+  {id:"construction",label:"Строительство / ремонт",icon:"ti-building"},
+  {id:"fitness",label:"Фитнес / спорт",icon:"ti-barbell"},
+  {id:"freelance",label:"Фриланс / агентство",icon:"ti-device-laptop"},
+  {id:"medicine",label:"Медицина / клиника",icon:"ti-stethoscope"},
+  {id:"edu",label:"Обучение / курсы",icon:"ti-school"},
+];
+const PAINS=[
+  {id:"p0",label:"Часы на рутину каждый день"},
+  {id:"p1",label:"Теряю клиентов из-за долгих ответов"},
+  {id:"p2",label:"Сам делаю то, что должен помощник"},
+  {id:"p3",label:"Хаос в задачах и заявках"},
+  {id:"p4",label:"Отчёты и документы съедают время"},
+  {id:"p5",label:"Нет времени на соцсети и контент"},
+  {id:"p6",label:"Одни и те же вопросы от клиентов"},
+  {id:"p7",label:"Запись и расписание — головная боль"},
+];
+const SIZES=[
+  {id:"s0",label:"Один / ИП"},
+  {id:"s1",label:"2–5 человек"},
+  {id:"s2",label:"6–15 человек"},
+  {id:"s3",label:"15+ человек"},
+];
+
+const S={step:1,biz:null,pains:[],size:null,loading:false,result:null,err:null,apiKey:'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'};
+
+function $(id){return document.getElementById(id);}
+function render(){$('app').innerHTML=buildHTML();}
+
+function buildHTML(){
+  let h='';
+
+  // Progress bar (steps 1 & 2)
+  if(S.step<3){
+    h+=`<div class="prog">${[1,2,3].map(n=>`<div class="prog-bar${n<=S.step?' done':''}"></div>`).join('')}</div>`;
+  }
+
+  // STEP 1
+  if(S.step===1){
+    h+=`
+    <p class="stitle">Тип бизнеса</p>
+    <div class="biz-grid">
+      ${BIZ.map(b=>`<button class="biz-card${S.biz===b.id?' sel':''}" data-biz="${b.id}"><i class="ti ${b.icon}" aria-hidden="true"></i>${escHtml(b.label)}</button>`).join('')}
+    </div>
+
+    <hr/>
+    <p class="stitle">Размер команды</p>
+    <div class="chips">
+      ${SIZES.map(s=>`<button class="chip${S.size===s.id?' sel':''}" data-size="${s.id}">${escHtml(s.label)}</button>`).join('')}
+    </div>
+
+    <button class="btn btn-primary" id="btn1" ${S.biz?'':'disabled'} onclick="S.step=2;render()">
+      <i class="ti ti-arrow-right" aria-hidden="true"></i>Далее
+    </button>`;
+  }
+
+  // STEP 2
+  if(S.step===2){
+    h+=`
+    <p class="stitle">Что больше всего отнимает время?</p>
+    <p class="shint">Выбери всё, что актуально</p>
+    <div class="chips">
+      ${PAINS.map(p=>`<button class="chip${S.pains.includes(p.id)?' sel':''}" data-pain="${p.id}">${escHtml(p.label)}</button>`).join('')}
+    </div>
+
+    ${S.err?`<div class="error"><i class="ti ti-alert-circle" aria-hidden="true"></i> ${escHtml(S.err)}</div>`:''}
+
+    <button class="btn btn-primary" ${S.pains.length&&!S.loading?'':'disabled'} onclick="runDiag()">
+      ${S.loading
+        ?`<i class="ti ti-loader-2 spin" aria-hidden="true"></i>Анализирую...`
+        :`<i class="ti ti-cpu" aria-hidden="true"></i>Запустить ИИ-диагностику`}
+    </button>
+
+    ${S.loading?`<div class="scan">
+      <div class="scan-line">▶ Анализирую бизнес-процессы...</div>
+      <div class="scan-line">▶ Сканирую точки потерь...</div>
+      <div>▶ Строю карту автоматизации...<span class="cursor">█</span></div>
+    </div>`:''}
+
+    <div class="btn-center">
+      <button class="btn btn-ghost" onclick="S.step=1;S.err=null;render()">← Назад</button>
+    </div>`;
+  }
+
+  // STEP 3 — Results
+  if(S.step===3&&S.result){
+    const res=S.result;
+    h+=`
+    <div class="result-hero">
+      <div class="hours-num">${res.hours_saved}</div>
+      <div>
+        <div class="hours-label">часов в месяц можно сэкономить</div>
+        <div class="hours-verdict">${escHtml(res.verdict||'')}</div>
+      </div>
+    </div>
+
+    <p class="stitle" style="margin-bottom:14px">3 задачи для немедленной автоматизации</p>
+
+    ${(res.tasks||[]).map(t=>`
+    <div class="task-card">
+      <div class="task-header">
+        <span class="task-title">${escHtml(t.title)}</span>
+        <span class="${t.impact==='высокий'?'badge-high':'badge-mid'}">${escHtml(t.impact)}</span>
+      </div>
+      <p class="task-desc">${escHtml(t.description)}</p>
+      <div class="task-tool"><i class="ti ti-tool" aria-hidden="true"></i>${escHtml(t.tool)}</div>
+    </div>`).join('')}
+
+    <div class="first-step">
+      <div class="first-step-label"><i class="ti ti-target-arrow" aria-hidden="true"></i>Первый шаг на этой неделе</div>
+      <p class="first-step-text">${escHtml(res.first_step)}</p>
+    </div>
+
+    <div class="cta">
+      <div class="cta-icon"><i class="ti ti-brand-telegram" aria-hidden="true"></i></div>
+      <div class="cta-title">Хочешь внедрить это в свой бизнес?</div>
+      <div class="cta-sub">В канале — живые кейсы, готовые связки и пошаговые инструкции.<br>Без воды. Только то, что реально работает.</div>
+      <a href="https://t.me/studioquince" target="_blank" class="cta-btn">
+        <i class="ti ti-brand-telegram" aria-hidden="true"></i>Подписаться на @studioquince
+      </a>
+      <div class="cta-footer">ИИ-агенты на практике · бесплатно</div>
+    </div>
+
+    <div class="btn-center" style="margin-top:16px">
+      <button class="btn btn-ghost" onclick="resetAll()">↺ Попробовать для другого бизнеса</button>
+    </div>`;
+  }
+
+  return h;
+}
+
+// Event delegation — fixes all selection bugs
+document.addEventListener('click', function(e){
+  const t=e.target.closest('[data-biz]');
+  const s=e.target.closest('[data-size]');
+  const p=e.target.closest('[data-pain]');
+  if(t){S.biz=t.dataset.biz; render(); return;}
+  if(s){S.size=s.dataset.size; render(); return;}
+  if(p){
+    const id=p.dataset.pain;
+    S.pains=S.pains.includes(id)?S.pains.filter(x=>x!==id):[...S.pains,id];
+    render(); return;
+  }
+});
+
+
+async function runDiag(){
+  if(!S.pains.length||S.loading) return;
+  S.loading=true; S.err=null; render();
+
+  const bizLabel=BIZ.find(b=>b.id===S.biz)?.label||S.biz;
+  const sizeLabel=SIZES.find(s=>s.id===S.size)?.label||'не указан';
+  const painLabels=S.pains.map(p=>PAINS.find(x=>x.id===p)?.label).filter(Boolean);
+
+  const prompt=`Ты — практикующий ИИ-автоматизатор для малого бизнеса. Дай диагностику конкретно и честно.
+
+Бизнес: ${bizLabel}
+Размер команды: ${sizeLabel}
+Боли: ${painLabels.join('; ')}
+
+Ответь СТРОГО в JSON (без markdown-блоков, без пояснений вне JSON):
+{
+  "hours_saved": <число от 10 до 80>,
+  "tasks": [
+    { "title": "...", "description": "...", "tool": "...", "impact": "высокий" },
+    { "title": "...", "description": "...", "tool": "...", "impact": "средний" },
+    { "title": "...", "description": "...", "tool": "...", "impact": "высокий" }
+  ],
+  "first_step": "Конкретный первый шаг — что сделать на этой неделе (1-2 предложения)",
+  "verdict": "Ёмкий вывод про этот бизнес (1 предложение, честно)"
+}
+
+Инструменты — конкретные: Telegram-бот, n8n, Make, Claude, Notion, AmoCRM, Google Sheets и т.п.`;
+
+  try{
+    const res=await fetch('https://api.openai.com/v1/chat/completions',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+S.apiKey
+      },
+      body:JSON.stringify({
+        model:'gpt-4o',
+        max_tokens:1000,
+        messages:[{role:'user',content:prompt}],
+        response_format:{type:'json_object'}
+      })
+    });
+    const data=await res.json();
+    if(data.error){throw new Error(data.error.message);}
+    const text=data.choices?.[0]?.message?.content||'';
+    S.result=JSON.parse(text);
+    S.step=3;
+  }catch(e){
+    S.err=e.message||'Ошибка запроса. Проверь ключ и попробуй снова.';
+  }finally{
+    S.loading=false; render();
+  }
+}
+
+function resetAll(){
+  Object.assign(S,{step:1,biz:null,pains:[],size:null,loading:false,result:null,err:null});
+  render();
+}
+
+function escHtml(s){
+  if(!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+render();
+</script>
+</body>
+</html>
