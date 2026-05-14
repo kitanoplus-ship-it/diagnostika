@@ -391,7 +391,7 @@ async function runDiag(){
 Инструменты — конкретные: Telegram-бот, n8n, Make, Claude, Notion, AmoCRM, Google Sheets и т.п.`;
 
   try{
-    const res=await fetch('https://ai.iquince.online/chat',{
+    const res=await fetch('https://openai-proxy.kitanoplus.workers.dev/',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -407,21 +407,7 @@ async function runDiag(){
     S.result=JSON.parse(text);
     S.step=3;
   }catch(e){
-    let msg = e.message || 'Неизвестная ошибка';
-    let hint = '';
-    if(msg==='Failed to fetch'){
-      hint = ' | Сервер недоступен из браузера. Тест связи: ';
-      fetch('https://ai.iquince.online/ping').then(r=>r.json()).then(d=>{
-        S.err = 'Failed to fetch /chat, но /ping работает (' + JSON.stringify(d) + '). Проблема в CORS или WAF.';
-        render();
-      }).catch(e2=>{
-        S.err = 'Failed to fetch — ai.iquince.online недоступен из вашего браузера (' + e2.message + '). Попробуйте VPN.';
-        render();
-      });
-    } else {
-      S.err = msg;
-    }
-    if(!hint) {}
+    S.err=e.message||'Ошибка запроса. Попробуй снова.';
   }finally{
     S.loading=false; render();
   }
