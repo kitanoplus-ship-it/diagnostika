@@ -407,7 +407,21 @@ async function runDiag(){
     S.result=JSON.parse(text);
     S.step=3;
   }catch(e){
-    S.err=e.message||'Ошибка запроса. Проверь ключ и попробуй снова.';
+    let msg = e.message || 'Неизвестная ошибка';
+    let hint = '';
+    if(msg==='Failed to fetch'){
+      hint = ' | Сервер недоступен из браузера. Тест связи: ';
+      fetch('https://ai.iquince.online/ping').then(r=>r.json()).then(d=>{
+        S.err = 'Failed to fetch /chat, но /ping работает (' + JSON.stringify(d) + '). Проблема в CORS или WAF.';
+        render();
+      }).catch(e2=>{
+        S.err = 'Failed to fetch — ai.iquince.online недоступен из вашего браузера (' + e2.message + '). Попробуйте VPN.';
+        render();
+      });
+    } else {
+      S.err = msg;
+    }
+    if(!hint) {}
   }finally{
     S.loading=false; render();
   }
